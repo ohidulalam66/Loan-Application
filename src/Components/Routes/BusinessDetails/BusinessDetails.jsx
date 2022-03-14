@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
+import swal from "sweetalert";
 
 const businessType = [
   {
@@ -34,10 +35,43 @@ const businessType = [
 ];
 
 const BusinessDetails = () => {
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [BusinessName, setBusinessName] = React.useState("");
   const [type, setType] = React.useState("Shop/Cafe");
+  const [gstNo, setGstNo] = React.useState("");
+  const [address, setAddress] = React.useState("");
+  const [phoneNo, setPhoneNo] = React.useState("");
+  const [message, setMessage] = React.useState("");
 
-  const handleTypeChange = (e) => {
-    setType(e.target.value);
+  const businessDetailsData = {
+    firstName,
+    lastName,
+    BusinessName,
+    type,
+    gstNo,
+    address,
+    phoneNo,
+    message,
+  };
+
+  const BusinessDetailsHandle = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:8000/businessDetails", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(businessDetailsData),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result) {
+          swal("Well Done!", "Business Details Add!", "success");
+        } else {
+          swal("Sorry!", "Business Details don't Add!", "error");
+        }
+      });
   };
 
   return (
@@ -55,7 +89,7 @@ const BusinessDetails = () => {
           Bangladesh Ltd (IBBL). Please find below my loan requirements and
           Personal Details. I also authorize IBBL to contact me in this regard.
         </Typography> */}
-        <form onSubmit="">
+        <form onSubmit={BusinessDetailsHandle}>
           <Grid container>
             <Grid item xs={12} md={6}>
               {/* <Typography variant="h6">Business Owner</Typography> */}
@@ -68,6 +102,7 @@ const BusinessDetails = () => {
                 }}
                 label="First Name"
                 type="text"
+                onChange={(e) => setFirstName(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -82,6 +117,7 @@ const BusinessDetails = () => {
                 }}
                 label="Last Name"
                 type="text"
+                onChange={(e) => setLastName(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -96,6 +132,7 @@ const BusinessDetails = () => {
                 }}
                 label="Applicant’s Business Name"
                 type="text"
+                onChange={(e) => setBusinessName(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -111,7 +148,7 @@ const BusinessDetails = () => {
                 select
                 label="Business Type"
                 value={type}
-                onChange={handleTypeChange}
+                onChange={(e) => setType(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -134,6 +171,7 @@ const BusinessDetails = () => {
                 }}
                 label="GST No"
                 type="number"
+                onChange={(e) => setGstNo(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -148,6 +186,7 @@ const BusinessDetails = () => {
                 }}
                 label="Present Address (Thana & District name only)"
                 type="text"
+                onChange={(e) => setAddress(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -161,7 +200,8 @@ const BusinessDetails = () => {
                   width: "95%",
                 }}
                 label="Phone Number"
-                type="text"
+                type="number"
+                onChange={(e) => setPhoneNo(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -176,6 +216,7 @@ const BusinessDetails = () => {
                 }}
                 placeholder="Message"
                 type="textarea"
+                onChange={(e) => setMessage(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -183,10 +224,15 @@ const BusinessDetails = () => {
               />
             </Grid>
           </Grid>
-          <Button variant="outlined" sx={{ color: "green", mr: "5px" }}>
+          <Button
+            variant="outlined"
+            type="submit"
+            sx={{ color: "green", mr: "5px" }}
+          >
             Add
           </Button>
         </form>
+        <br />
         <Link to="/personalDetails" style={{ textDecoration: "none" }}>
           <Button variant="outlined" sx={{ color: "red", mr: "5px" }}>
             Previous

@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import React from "react";
+import swal from "sweetalert";
 
 const bloodGroup = [
   {
@@ -56,15 +57,42 @@ const nationalityGroup = [
 ];
 
 const PersonalDetails = () => {
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [birthOfDate, setBirthOfDate] = React.useState("");
+  const [phoneNumber, setPhoneNumber] = React.useState("");
+  const [address, setAddress] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [blood, setBlood] = React.useState("AB+");
   const [nationality, setNationality] = React.useState("Bangladeshi");
 
-  const handleBloodChange = (e) => {
-    setBlood(e.target.value);
+  const personalDetailsData = {
+    firstName,
+    lastName,
+    birthOfDate,
+    phoneNumber,
+    address,
+    email,
+    blood,
+    nationality,
   };
-
-  const handleNationalityChange = (e) => {
-    setNationality(e.target.value);
+  const personalDetailsHandle = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:8000/personalDetails", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(personalDetailsData),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result) {
+          swal("Well Done!", "Personal Details Add!", "success");
+        } else {
+          swal("Sorry!", "Personal Details don't Add!", "error");
+        }
+      });
   };
   return (
     <>
@@ -81,7 +109,7 @@ const PersonalDetails = () => {
           Bangladesh Ltd (IBBL). Please find below my loan requirements and
           Personal Details. I also authorize IBBL to contact me in this regard.
         </Typography>
-        <form onSubmit="">
+        <form onSubmit={personalDetailsHandle}>
           <Grid container>
             <Grid item xs={12} md={6}>
               <TextField
@@ -93,6 +121,7 @@ const PersonalDetails = () => {
                 }}
                 label="First Name"
                 type="text"
+                onChange={(e) => setFirstName(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -107,6 +136,7 @@ const PersonalDetails = () => {
                 }}
                 label="Last Name"
                 type="text"
+                onChange={(e) => setLastName(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -121,6 +151,7 @@ const PersonalDetails = () => {
                 }}
                 label="Date of Birth"
                 type="date"
+                onChange={(e) => setBirthOfDate(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -135,6 +166,7 @@ const PersonalDetails = () => {
                 }}
                 label="Phone Number"
                 type="text"
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -151,6 +183,7 @@ const PersonalDetails = () => {
                 }}
                 label="Present Address (Thana & District name only)"
                 type="text"
+                onChange={(e) => setAddress(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -166,7 +199,7 @@ const PersonalDetails = () => {
                 select
                 label="Blood Group"
                 value={blood}
-                onChange={handleBloodChange}
+                onChange={(e) => setBlood(e.target.value)}
                 required
               >
                 {bloodGroup.map((option) => (
@@ -185,7 +218,7 @@ const PersonalDetails = () => {
                 select
                 label="Nationality"
                 value={nationality}
-                onChange={handleNationalityChange}
+                onChange={(e) => setNationality(e.target.value)}
                 required
               >
                 {nationalityGroup.map((option) => (
@@ -203,6 +236,7 @@ const PersonalDetails = () => {
                 }}
                 label="Email Address"
                 type="text"
+                onChange={(e) => setEmail(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -210,15 +244,16 @@ const PersonalDetails = () => {
               />
             </Grid>
           </Grid>
-          <Button variant="outlined" sx={{ color: "green", mr: "5px" }}>
+          <Button variant="outlined" type="submit" sx={{ color: "green" }}>
             Add
           </Button>
-          <Link to="/businessDetails" style={{ textDecoration: "none" }}>
-            <Button variant="outlined" sx={{ color: "red" }}>
-              Next
-            </Button>
-          </Link>
         </form>
+        <br />
+        <Link to="/businessDetails" style={{ textDecoration: "none" }}>
+          <Button variant="outlined" sx={{ color: "red" }}>
+            Next
+          </Button>
+        </Link>
       </Container>
     </>
   );

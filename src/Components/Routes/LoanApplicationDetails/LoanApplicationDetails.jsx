@@ -7,8 +7,8 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
+// import Fab from "@mui/material/Fab";
+// import AddIcon from "@mui/icons-material/Add";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -81,7 +81,12 @@ const LoanApplicationDetails = () => {
                 </Typography>
                 <Typography
                   variant="p"
-                  sx={{ background: "#2787C1", color: "white", p: "2px" }}
+                  sx={{
+                    border: "1px solid #2787C1",
+                    borderRadius: "10px",
+                    py: "2px",
+                    px: "4px",
+                  }}
                 >
                   UP TO BDT {loan}
                 </Typography>
@@ -126,13 +131,13 @@ const LoanApplicationDetails = () => {
                 }}
                 required
               />
-              <Typography variant="p" color="gray">
+              {/* <Typography variant="p" color="gray">
                 Upload files of documents in your place(png/jpg):
               </Typography>
               <br />
               <Fab color="primary" aria-label="add">
                 <AddIcon />
-              </Fab>
+              </Fab> */}
               <Box
                 sx={{
                   my: "15px",
@@ -142,7 +147,12 @@ const LoanApplicationDetails = () => {
                 <Typography variant="h6">Loan Tenure(Years)</Typography>
                 <Typography
                   variant="p"
-                  sx={{ background: "#2787C1", color: "white", p: "2px" }}
+                  sx={{
+                    border: "1px solid #2787C1",
+                    borderRadius: "10px",
+                    py: "2px",
+                    px: "4px",
+                  }}
                 >
                   UP TO Years {years}
                 </Typography>
@@ -151,18 +161,19 @@ const LoanApplicationDetails = () => {
                   sx={{ mb: "15px" }}
                   step={1}
                   marks
-                  min={2}
+                  min={1}
                   max={10}
                 />
               </Box>
             </Grid>
           </Grid>
-          <Button variant="outlined" sx={{ color: "green", mr: "5px" }}>
+          <Button variant="outlined" sx={{ color: "green" }}>
             Add
           </Button>
         </form>
+        <br />
         <Link to="/businessDetails" style={{ textDecoration: "none" }}>
-          <Button variant="outlined" sx={{ color: "red", mr: "5px" }}>
+          <Button variant="outlined" sx={{ color: "red" }}>
             Previous
           </Button>
         </Link>
