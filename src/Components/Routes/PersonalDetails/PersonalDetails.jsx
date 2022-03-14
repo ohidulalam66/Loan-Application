@@ -89,6 +89,7 @@ const PersonalDetails = () => {
       .then((result) => {
         if (result) {
           swal("Well Done!", "Personal Details Add!", "success");
+          e.target.reset();
         } else {
           swal("Sorry!", "Personal Details don't Add!", "error");
         }

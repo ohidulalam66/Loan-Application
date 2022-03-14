@@ -68,6 +68,7 @@ const BusinessDetails = () => {
       .then((result) => {
         if (result) {
           swal("Well Done!", "Business Details Add!", "success");
+          e.target.reset();
         } else {
           swal("Sorry!", "Business Details don't Add!", "error");
         }

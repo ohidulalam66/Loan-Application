@@ -11,8 +11,12 @@ import {
 // import AddIcon from "@mui/icons-material/Add";
 import React from "react";
 import { Link } from "react-router-dom";
+import swal from "sweetalert";
 
 const LoanApplicationDetails = () => {
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [phoneNumber, setPhoneNumber] = React.useState("");
   const [loan, setLoan] = React.useState(50000);
   const [years, setYears] = React.useState(1);
   const [interestRate, setInterestRate] = React.useState(1);
@@ -29,6 +33,35 @@ const LoanApplicationDetails = () => {
     setInterestRate(number);
   };
 
+  const loanApplicationDetailsData = {
+    firstName,
+    lastName,
+    phoneNumber,
+    loan,
+    years,
+    interestRate,
+  };
+
+  const loanApplicationDetailsHandle = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:8000/loanApplicationDetails", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(loanApplicationDetailsData),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result) {
+          swal("Well Done!", "Loan Application Details Add!", "success");
+          e.target.reset();
+        } else {
+          swal("Sorry!", "Loan Application Details don't Add!", "error");
+        }
+      });
+  };
+
   return (
     <>
       <Typography
@@ -39,7 +72,7 @@ const LoanApplicationDetails = () => {
         Loan Application Details
       </Typography>
       <Container>
-        <form onSubmit="">
+        <form onSubmit={loanApplicationDetailsHandle}>
           <Grid container>
             <Grid item xs={12} md={6}>
               <TextField
@@ -51,6 +84,7 @@ const LoanApplicationDetails = () => {
                 }}
                 label="First Name"
                 type="text"
+                onChange={(e) => setFirstName(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -65,6 +99,7 @@ const LoanApplicationDetails = () => {
                 }}
                 label="Phone Number"
                 type="number"
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -126,6 +161,7 @@ const LoanApplicationDetails = () => {
                 }}
                 label="Last Name"
                 type="text"
+                onChange={(e) => setLastName(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -167,7 +203,7 @@ const LoanApplicationDetails = () => {
               </Box>
             </Grid>
           </Grid>
-          <Button variant="outlined" sx={{ color: "green" }}>
+          <Button variant="outlined" type="submit" sx={{ color: "green" }}>
             Add
           </Button>
         </form>
